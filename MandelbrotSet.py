@@ -1,7 +1,8 @@
 from PIL import Image
 import colorsys
 import math
-import os
+import time
+
 
 def logColor(distance, base, const, scale):
     color = -1 * math.log(distance, base)
@@ -16,11 +17,13 @@ def powerColor(distance, exp, const, scale):
 
 
 def main():
+    
     # Image frame parameters
     width = 1000 # pixels
     aspectRatio = 4/3
     height = round(width / aspectRatio)
 
+    # Number of precision count checks
     precision = 500
 
     x = -0.65
@@ -34,21 +37,24 @@ def main():
     image = Image.new('RGB', (width, height), color = 'black')
     pixels = image.load()
 
+    # Start time
+    startTime = time.time()
+
+    # Loop for generating the image
     for row in range(height):
         for col in range(width):
-            x = minX + col * xRange / width
-            y = maxY - row * yRange / height
-            oldX = x
-            oldY = y
+            c = 0
+            c0 = complex(minX + col * xRange / width, maxY - row * yRange / height)
 
             for i in range(precision + 1):
-                a = x*x - y*y # real component of z^2
-                b = 2 * x * y # imaginary component of z^2
-                x = a + oldX # real component of new z
-                y = b + oldY # imaginary component of new z
-                if x*x + y*y > 4:
+
+                # Break the loop if the absolute value is more than 2, it won't converge
+                if abs(c) > 2:
                     break
+                
+                c = c * c  + c0
             
+            # Apply colour when absolute value diverges
             if i < precision:
                 distance = (i + 1) / (precision + 1)
                 rgb = logColor(distance, 0.2, 0.27, 1.0)
@@ -56,6 +62,10 @@ def main():
             
             index = row * width + col + 1
             print("{} / {}, {}%".format(index, width * height, round(index / width / height * 100 * 10) / 10))
+
+    # Calculate execution time
+    endTime = time.time()
+    print("Execution time: ", endTime-startTime)
 
     image.save('output.png')
 
