@@ -46,4 +46,5 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 3. https://en.wikipedia.org/wiki/Mandelbrot_set
 
 ## Output image:
-![output_powercolor](https://github.com/user-attachments/assets/f159f056-ac02-441c-8c03-3c207785947e)
+![output](https://github.com/user-attachments/assets/46743ebb-e0da-458a-82c3-bdabd90d6bad)
+
